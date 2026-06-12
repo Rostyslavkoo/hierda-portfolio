@@ -23,20 +23,24 @@ export function usePhotos() {
   }
 
   async function upload(file: File, category: Photo['category']) {
-    const ext = file.name.split('.').pop()
-    const path = `${Date.now()}.${ext}`
+    const { thumb, full, ext } = await compressImage(file)
+    const stamp = Date.now()
+    const fullPath = `${stamp}.${ext}`
+    const thumbPath = `${stamp}_thumb.${ext}`
 
-    const { error: uploadErr } = await supabase.storage
-      .from('portfolio')
-      .upload(path, file, { cacheControl: '3600', upsert: false })
+    const [up1, up2] = await Promise.all([
+      supabase.storage.from('portfolio').upload(fullPath, full, { cacheControl: '3600', upsert: false, contentType: full.type }),
+      supabase.storage.from('portfolio').upload(thumbPath, thumb, { cacheControl: '3600', upsert: false, contentType: thumb.type }),
+    ])
+    if (up1.error) return { error: up1.error.message }
+    if (up2.error) return { error: up2.error.message }
 
-    if (uploadErr) return { error: uploadErr.message }
-
-    const { data: urlData } = supabase.storage.from('portfolio').getPublicUrl(path)
+    const fullUrl = supabase.storage.from('portfolio').getPublicUrl(fullPath).data.publicUrl
+    const thumbUrl = supabase.storage.from('portfolio').getPublicUrl(thumbPath).data.publicUrl
 
     const { data, error: insertErr } = await supabase
       .from('photos')
-      .insert({ url: urlData.publicUrl, category, sort_order: photos.value.length })
+      .insert({ url: fullUrl, thumb_url: thumbUrl, category, sort_order: photos.value.length })
       .select()
       .single()
 
@@ -47,9 +51,11 @@ export function usePhotos() {
   }
 
   async function remove(photo: Photo) {
-    const path = new URL(photo.url).pathname.split('/').pop()!
+    const paths = [photo.url, photo.thumb_url]
+      .filter((u): u is string => !!u)
+      .map(u => new URL(u).pathname.split('/').pop()!)
 
-    await supabase.storage.from('portfolio').remove([path])
+    await supabase.storage.from('portfolio').remove(paths)
 
     const { error: err } = await supabase
       .from('photos')

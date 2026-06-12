@@ -1,21 +1,16 @@
 <template>
   <section id="about" class="about">
     <div class="bleed-section">
-      <h2 class="bleed-title" aria-hidden="true">ABOUT</h2>
+      <h2 class="bleed-title" aria-hidden="true">ABOUT ME</h2>
     </div>
 
     <div class="about__inner">
       <figure class="about__polaroid">
-        <img
-          :src="aboutPhoto.src"
-          :alt="aboutPhoto.alt"
-          loading="lazy"
-        />
+        <AppImage class="about__img-wrap" :src="aboutPhoto.src" :alt="aboutPhoto.alt" ratio="3 / 4" />
         <figcaption class="about__polaroid-cap">{{ aboutPhoto.label }}</figcaption>
       </figure>
 
       <div class="about__text">
-        <AppEyebrow>About me</AppEyebrow>
         <blockquote class="about__quote">
           "{{ model.quote }}"
         </blockquote>
@@ -47,7 +42,7 @@ const [{ data: dbStats }, { data: dbAboutPhoto }] = await Promise.all([
   useAsyncData('about-photo', async () => {
     const { data } = await supabase
       .from('photos')
-      .select('url')
+      .select('url, thumb_url')
       .eq('category', 'about')
       .order('sort_order')
       .limit(1)
@@ -57,7 +52,7 @@ const [{ data: dbStats }, { data: dbAboutPhoto }] = await Promise.all([
 ])
 
 const aboutPhoto = computed(() => ({
-  src: dbAboutPhoto.value?.url ?? '',
+  src: dbAboutPhoto.value?.thumb_url ?? dbAboutPhoto.value?.url ?? '',
   alt: 'Hierda Karlson — portrait',
   label: 'Madrid, 2025',
 }))
@@ -89,7 +84,7 @@ const aboutStats = computed(() => {
   font-size: clamp(4rem, 18vw, 16rem);
   line-height: 0.9;
   letter-spacing: 0.02em;
-  color: var(--bg-raised);
+  color: var(--text-strong);
   white-space: nowrap;
   user-select: none;
   pointer-events: none;
@@ -110,16 +105,16 @@ const aboutStats = computed(() => {
   position: relative;
 }
 
-.about__polaroid img {
+.about__img-wrap {
   width: 100%;
-  aspect-ratio: 3 / 4;
-  object-fit: cover;
-  filter: grayscale(0.1);
-  box-shadow: inset 0 0 0 12px var(--border-soft);
-  transition: filter var(--dur-base) var(--ease-editorial);
 }
 
-.about__polaroid:hover img {
+.about__polaroid :deep(img) {
+  filter: grayscale(0.1);
+  transition: filter var(--dur-base) var(--ease-editorial), opacity 0.5s var(--ease-editorial);
+}
+
+.about__polaroid:hover :deep(img) {
   filter: grayscale(0);
 }
 

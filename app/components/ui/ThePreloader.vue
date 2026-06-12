@@ -1,0 +1,92 @@
+<template>
+  <Transition name="preloader">
+    <div v-if="visible" class="preloader" role="status" aria-live="polite">
+      <div class="preloader__inner">
+        <span class="preloader__mono">HK</span>
+        <div class="preloader__bar">
+          <div class="preloader__fill" :style="{ width: progress + '%' }" />
+        </div>
+        <span class="preloader__pct">{{ progress }}%</span>
+      </div>
+    </div>
+  </Transition>
+</template>
+
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import { useSitePhotos } from '~/composables/useSitePhotos'
+import { usePreloadImages } from '~/composables/usePreloadImages'
+
+const visible = ref(true)
+const { progress, preload } = usePreloadImages()
+
+function hide() { visible.value = false }
+
+onMounted(async () => {
+  // Safety net: never trap the user behind the curtain if something stalls.
+  const safety = setTimeout(hide, 8000)
+
+  const { data: urls } = await useSitePhotos()
+  await preload(urls.value ?? [])
+
+  clearTimeout(safety)
+  // Brief hold at 100% so the bar visibly completes before the curtain lifts.
+  setTimeout(hide, 350)
+})
+</script>
+
+<style scoped>
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--bg-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.preloader__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+  width: min(260px, 60vw);
+}
+
+.preloader__mono {
+  font-family: var(--font-handwritten);
+  font-size: 2.4rem;
+  color: var(--text-strong);
+  letter-spacing: 0.04em;
+}
+
+.preloader__bar {
+  width: 100%;
+  height: 1px;
+  background: var(--border-hair);
+  overflow: hidden;
+}
+
+.preloader__fill {
+  height: 100%;
+  background: var(--text-strong);
+  transition: width 0.3s var(--ease-editorial);
+}
+
+.preloader__pct {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-widest);
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.preloader-leave-active {
+  transition: opacity 0.6s var(--ease-editorial);
+}
+.preloader-leave-to {
+  opacity: 0;
+}
+</style>

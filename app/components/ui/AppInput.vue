@@ -7,6 +7,7 @@
       :type="type"
       :value="modelValue"
       :placeholder="placeholder"
+      :required="required"
       @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
     />
   </div>
@@ -21,7 +22,8 @@ const props = withDefaults(defineProps<{
   id?: string
   type?: string
   placeholder?: string
-}>(), { type: 'text' })
+  required?: boolean
+}>(), { type: 'text', required: false })
 
 defineEmits<{
   'update:modelValue': [value: string]

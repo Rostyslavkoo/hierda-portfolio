@@ -2,7 +2,11 @@
   <div class="page">
     <div class="page__head">
       <h1 class="page__title">Portfolio</h1>
-      <p class="page__sub">Gallery photos shown on the public site. Drag to reorder.</p>
+      <p class="page__sub">
+        Gallery photos shown on the public site. Drag to reorder.
+        Set category to <strong>Cover</strong> for the 3 homepage hero photos,
+        or <strong>About portrait</strong> for the About section image.
+      </p>
     </div>
 
     <!-- Upload zone -->
@@ -35,9 +39,11 @@
         <div v-for="(item, i) in pending" :key="i" class="pending__item">
           <img :src="item.preview" :alt="item.file.name" class="pending__thumb" />
           <select v-model="item.category" class="pending__select">
+            <option value="cover">Cover (top 3)</option>
             <option value="editorial">Editorial</option>
             <option value="commercial">Commercial</option>
             <option value="portrait">Portrait</option>
+            <option value="about">About portrait</option>
           </select>
           <button class="pending__remove" @click="pending.splice(i, 1)" aria-label="Remove">×</button>
         </div>
@@ -96,7 +102,7 @@ const uploadProgress = ref('')
 interface PendingItem {
   file: File
   preview: string
-  category: 'editorial' | 'commercial' | 'portrait'
+  category: NonNullable<Photo['category']>
 }
 const pending = ref<PendingItem[]>([])
 

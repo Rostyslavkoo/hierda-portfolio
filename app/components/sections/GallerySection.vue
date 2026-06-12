@@ -5,50 +5,50 @@
     </div>
 
     <div class="gallery__inner">
-      <AppEyebrow>Portfolio</AppEyebrow>
-
-      <div class="gallery__spread">
-        <button
-          class="gallery__item gallery__item--hero"
-          @click="open(0)"
-          :aria-label="allPhotos[0].label"
-        >
-          <img :src="allPhotos[0].src" :alt="allPhotos[0].alt" loading="lazy" />
-          <span class="gallery__label">{{ allPhotos[0].label }}</span>
-        </button>
-
-        <div class="gallery__col">
+      <template v-if="allPhotos.length > 0">
+        <div class="gallery__spread">
           <button
-            v-for="(photo, i) in allPhotos.slice(1, 4)"
+            class="gallery__item gallery__item--hero"
+            @click="open(0)"
+            :aria-label="allPhotos[0].label"
+          >
+            <AppImage :src="allPhotos[0].src" :alt="allPhotos[0].alt" ratio="3 / 4" />
+            <span class="gallery__label">{{ allPhotos[0].label }}</span>
+          </button>
+
+          <div class="gallery__col">
+            <button
+              v-for="(photo, i) in allPhotos.slice(1, 4)"
+              :key="photo.src"
+              class="gallery__item"
+              :class="`gallery__item--${photo.variant}`"
+              @click="open(i + 1)"
+              :aria-label="photo.label"
+            >
+              <AppImage :src="photo.src" :alt="photo.alt" ratio="4 / 3" />
+              <span class="gallery__label">{{ photo.label }}</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="gallery__row2">
+          <button
+            v-for="(photo, i) in allPhotos.slice(4)"
             :key="photo.src"
             class="gallery__item"
-            :class="`gallery__item--${photo.variant}`"
-            @click="open(i + 1)"
+            @click="open(i + 4)"
             :aria-label="photo.label"
           >
-            <img :src="photo.src" :alt="photo.alt" loading="lazy" />
+            <AppImage :src="photo.src" :alt="photo.alt" ratio="4 / 3" />
             <span class="gallery__label">{{ photo.label }}</span>
           </button>
         </div>
-      </div>
-
-      <div class="gallery__row2">
-        <button
-          v-for="(photo, i) in allPhotos.slice(4)"
-          :key="photo.src"
-          class="gallery__item"
-          @click="open(i + 4)"
-          :aria-label="photo.label"
-        >
-          <img :src="photo.src" :alt="photo.alt" loading="lazy" />
-          <span class="gallery__label">{{ photo.label }}</span>
-        </button>
-      </div>
+      </template>
     </div>
   </section>
 
   <TheLightbox
-    :photos="allPhotos"
+    :photos="lightboxPhotos"
     :current-index="currentIndex"
     :is-open="isOpen"
     @close="close"
@@ -65,19 +65,26 @@ const supabase = useSupabase()
 const { data: dbPhotos } = await useAsyncData('photos', async () => {
   const { data } = await supabase
     .from('photos')
-    .select('url, category')
+    .select('url, thumb_url, category')
     .not('category', 'in', '("cover","about")')
     .order('sort_order')
   return data ?? []
 })
 
+// Grid uses the lightweight thumb; full-res is reserved for the lightbox.
 const allPhotos = computed(() =>
   (dbPhotos.value ?? []).map((p, i) => ({
-    src: p.url,
+    src: p.thumb_url ?? p.url,
+    full: p.url,
     alt: `Hierda Karlson — ${p.category ?? 'photo'} ${i + 1}`,
     label: p.category ?? '',
     variant: (['hero', 'a', 'b', 'c'] as const)[i] as string | undefined,
   }))
+)
+
+// Lightbox shows full-resolution images.
+const lightboxPhotos = computed(() =>
+  allPhotos.value.map(p => ({ ...p, src: p.full }))
 )
 
 const { isOpen, currentIndex, open, close, prev, next } = useLightbox(allPhotos)
@@ -98,7 +105,7 @@ const { isOpen, currentIndex, open, close, prev, next } = useLightbox(allPhotos)
   font-size: clamp(4rem, 18vw, 16rem);
   line-height: 0.9;
   letter-spacing: 0.02em;
-  color: var(--bg-raised);
+  color: var(--text-strong);
   white-space: nowrap;
   user-select: none;
   pointer-events: none;
@@ -133,30 +140,18 @@ const { isOpen, currentIndex, open, close, prev, next } = useLightbox(allPhotos)
   position: relative;
   overflow: hidden;
   background: none;
-  border: none;
   cursor: pointer;
   padding: 0;
   display: block;
   border: 1px solid var(--border-soft);
 }
 
-.gallery__item--hero {
-  aspect-ratio: 3 / 4;
-}
-
-.gallery__item:not(.gallery__item--hero) {
-  aspect-ratio: 4 / 3;
-}
-
-.gallery__item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.gallery__item :deep(img) {
   filter: grayscale(0.12);
-  transition: transform 1.1s var(--ease-editorial), filter 1.1s var(--ease-editorial);
+  transition: transform 1.1s var(--ease-editorial), filter 1.1s var(--ease-editorial), opacity 0.5s var(--ease-editorial);
 }
 
-.gallery__item:hover img {
+.gallery__item:hover :deep(img) {
   transform: scale(1.04);
   filter: grayscale(0);
 }

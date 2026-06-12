@@ -3,6 +3,13 @@
     <div class="progress-bar" :style="{ width: progress + '%' }" />
 
     <nav class="nav" :class="{ 'nav--scrolled': isScrolled }">
+      <button class="nav__star-btn" @click="menuOpen = true" aria-label="Open menu">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M10 2 L11.8 8.2 L18 8.2 L13 12 L14.8 18.2 L10 14.5 L5.2 18.2 L7 12 L2 8.2 L8.2 8.2 Z"
+                stroke="currentColor" stroke-width="1" fill="none" />
+        </svg>
+      </button>
+
       <a href="#cover" class="nav__mono" aria-label="Hierda Karlson — home">HK</a>
 
       <ul class="nav__links">
@@ -12,13 +19,6 @@
           </a>
         </li>
       </ul>
-
-      <button class="nav__star-btn" @click="menuOpen = true" aria-label="Open menu">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-          <path d="M10 2 L11.8 8.2 L18 8.2 L13 12 L14.8 18.2 L10 14.5 L5.2 18.2 L7 12 L2 8.2 L8.2 8.2 Z"
-                stroke="currentColor" stroke-width="1" fill="none" />
-        </svg>
-      </button>
     </nav>
 
     <div v-if="menuOpen" class="mobile-menu" @click.self="menuOpen = false">
@@ -109,7 +109,6 @@ const isClient = import.meta.client
 .nav__link:hover { color: var(--text-accent); }
 
 .nav__star-btn {
-  display: none;
   background: none;
   border: none;
   cursor: pointer;
@@ -174,7 +173,6 @@ const isClient = import.meta.client
 }
 
 @media (max-width: 768px) {
-  .nav__links    { display: none; }
-  .nav__star-btn { display: flex; }
+  .nav__links { display: none; }
 }
 </style>

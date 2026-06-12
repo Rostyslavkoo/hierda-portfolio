@@ -1,14 +1,11 @@
 <template>
   <section id="shop" class="shop">
     <div class="bleed-section">
-      <h2 class="bleed-title" aria-hidden="true">WORKS</h2>
+      <h2 class="bleed-title" aria-hidden="true">ORIGINAL WORKS</h2>
     </div>
 
     <div class="shop__inner">
-      <AppEyebrow>Original Works</AppEyebrow>
-      <p class="shop__sub">
-        A small body of painting work — made in the studio, available for acquisition.
-      </p>
+      <p class="shop__acq">Paintings available for acquisition</p>
 
       <div class="shop__grid">
         <article
@@ -16,13 +13,7 @@
           :key="painting.id"
           class="painting"
         >
-          <div class="painting__frame">
-            <img
-              :src="painting.src"
-              :alt="painting.alt"
-              loading="lazy"
-            />
-          </div>
+          <AppImage class="painting__frame" :src="painting.src" :alt="painting.alt" ratio="3 / 4" />
           <div class="painting__body">
             <div class="painting__row">
               <h3 class="painting__title">{{ painting.title }}</h3>
@@ -50,7 +41,7 @@ const supabase = useSupabase()
 const { data: dbPaintings } = await useAsyncData('paintings', async () => {
   const { data } = await supabase
     .from('paintings')
-    .select('id, title, description, price, url')
+    .select('id, title, description, price, url, thumb_url')
     .eq('available', true)
     .order('sort_order')
   return data ?? []
@@ -63,7 +54,7 @@ const paintings = computed(() =>
     medium:     p.description ?? '',
     dimensions: '',
     price:      p.price ? `€ ${p.price.toLocaleString('de-DE')}` : '',
-    src:        p.url,
+    src:        p.thumb_url ?? p.url,
     alt:        `Painting — ${p.title}`,
   }))
 )
@@ -84,7 +75,7 @@ const paintings = computed(() =>
   font-size: clamp(4rem, 18vw, 16rem);
   line-height: 0.9;
   letter-spacing: 0.02em;
-  color: var(--bg-raised);
+  color: var(--text-strong);
   white-space: nowrap;
   user-select: none;
   pointer-events: none;
@@ -97,12 +88,13 @@ const paintings = computed(() =>
   gap: var(--space-8);
 }
 
-.shop__sub {
+.shop__acq {
   font-family: var(--font-body);
-  font-size: var(--text-lg);
-  line-height: var(--leading-relaxed);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
   color: var(--text-muted);
-  max-width: var(--measure);
 }
 
 .shop__grid {
@@ -112,21 +104,16 @@ const paintings = computed(() =>
 }
 
 .painting__frame {
-  aspect-ratio: 3 / 4;
-  overflow: hidden;
   border: 1px solid var(--border-hair);
   margin-bottom: var(--space-5);
 }
 
-.painting__frame img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.painting__frame :deep(img) {
   filter: grayscale(0.12);
-  transition: transform 1.1s var(--ease-editorial), filter 1.1s var(--ease-editorial);
+  transition: transform 1.1s var(--ease-editorial), filter 1.1s var(--ease-editorial), opacity 0.5s var(--ease-editorial);
 }
 
-.painting:hover .painting__frame img {
+.painting:hover .painting__frame :deep(img) {
   transform: scale(1.04);
   filter: grayscale(0);
 }

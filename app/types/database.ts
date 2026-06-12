@@ -21,6 +21,7 @@ export interface Database {
         Row: {
           id: string
           url: string
+          thumb_url: string | null
           category: 'editorial' | 'commercial' | 'portrait' | 'cover' | 'about' | null
           sort_order: number
           created_at: string
@@ -32,6 +33,7 @@ export interface Database {
         Row: {
           id: string
           url: string
+          thumb_url: string | null
           label: string | null
           sort_order: number
           created_at: string
@@ -46,6 +48,7 @@ export interface Database {
           price: number | null
           description: string | null
           url: string
+          thumb_url: string | null
           available: boolean
           sort_order: number
           created_at: string

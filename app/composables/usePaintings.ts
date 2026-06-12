@@ -19,20 +19,24 @@ export function usePaintings() {
   }
 
   async function create(file: File, payload: { title: string; price: number; description: string }) {
-    const ext = file.name.split('.').pop()
-    const path = `${Date.now()}.${ext}`
+    const { thumb, full, ext } = await compressImage(file)
+    const stamp = Date.now()
+    const fullPath = `${stamp}.${ext}`
+    const thumbPath = `${stamp}_thumb.${ext}`
 
-    const { error: uploadErr } = await supabase.storage
-      .from('paintings')
-      .upload(path, file, { cacheControl: '3600', upsert: false })
+    const [up1, up2] = await Promise.all([
+      supabase.storage.from('paintings').upload(fullPath, full, { cacheControl: '3600', upsert: false, contentType: full.type }),
+      supabase.storage.from('paintings').upload(thumbPath, thumb, { cacheControl: '3600', upsert: false, contentType: thumb.type }),
+    ])
+    if (up1.error) return { error: up1.error.message }
+    if (up2.error) return { error: up2.error.message }
 
-    if (uploadErr) return { error: uploadErr.message }
-
-    const { data: urlData } = supabase.storage.from('paintings').getPublicUrl(path)
+    const fullUrl = supabase.storage.from('paintings').getPublicUrl(fullPath).data.publicUrl
+    const thumbUrl = supabase.storage.from('paintings').getPublicUrl(thumbPath).data.publicUrl
 
     const { data, error: insertErr } = await supabase
       .from('paintings')
-      .insert({ ...payload, url: urlData.publicUrl, sort_order: paintings.value.length })
+      .insert({ ...payload, url: fullUrl, thumb_url: thumbUrl, sort_order: paintings.value.length })
       .select()
       .single()
 
@@ -56,8 +60,10 @@ export function usePaintings() {
   }
 
   async function remove(painting: Painting) {
-    const path = new URL(painting.url).pathname.split('/').pop()!
-    await supabase.storage.from('paintings').remove([path])
+    const paths = [painting.url, painting.thumb_url]
+      .filter((u): u is string => !!u)
+      .map(u => new URL(u).pathname.split('/').pop()!)
+    await supabase.storage.from('paintings').remove(paths)
     const { error: err } = await supabase.from('paintings').delete().eq('id', painting.id)
     if (!err) paintings.value = paintings.value.filter(p => p.id !== painting.id)
     return { error: err?.message }

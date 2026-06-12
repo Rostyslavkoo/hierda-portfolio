@@ -7,6 +7,7 @@
       :rows="rows"
       :value="modelValue"
       :placeholder="placeholder"
+      :required="required"
       @input="$emit('update:modelValue', ($event.target as HTMLTextAreaElement).value)"
     />
   </div>
@@ -21,7 +22,8 @@ const props = withDefaults(defineProps<{
   id?: string
   rows?: number
   placeholder?: string
-}>(), { rows: 4 })
+  required?: boolean
+}>(), { rows: 4, required: false })
 
 defineEmits<{
   'update:modelValue': [value: string]

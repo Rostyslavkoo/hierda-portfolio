@@ -5,21 +5,13 @@
     </div>
 
     <div class="snepi__inner">
-      <AppEyebrow>Digitals</AppEyebrow>
-
       <div class="snepi__grid">
         <figure
           v-for="photo in displayPhotos"
           :key="photo.src"
           class="snepi__item"
         >
-          <div class="snepi__photo">
-            <img
-              :src="photo.src"
-              :alt="photo.alt"
-              loading="lazy"
-            />
-          </div>
+          <AppImage class="snepi__photo" :src="photo.src" :alt="photo.alt" ratio="3 / 4" />
           <figcaption class="snepi__label">{{ photo.label }}</figcaption>
         </figure>
       </div>
@@ -31,13 +23,13 @@
 const supabase = useSupabase()
 
 const { data: dbDigitals } = await useAsyncData('digitals', async () => {
-  const { data } = await supabase.from('digitals').select('url, label').order('sort_order')
+  const { data } = await supabase.from('digitals').select('url, thumb_url, label').order('sort_order')
   return data ?? []
 })
 
 const displayPhotos = computed(() =>
   (dbDigitals.value ?? []).map(d => ({
-    src: d.url,
+    src: d.thumb_url ?? d.url,
     alt: `Hierda Karlson — ${d.label ?? 'digital'}`,
     label: d.label ?? '',
   }))
@@ -59,7 +51,7 @@ const displayPhotos = computed(() =>
   font-size: clamp(4rem, 18vw, 16rem);
   line-height: 0.9;
   letter-spacing: 0.02em;
-  color: var(--bg-raised);
+  color: var(--text-strong);
   white-space: nowrap;
   user-select: none;
   pointer-events: none;
@@ -67,15 +59,12 @@ const displayPhotos = computed(() =>
 
 .snepi__inner {
   padding: 0 var(--gutter);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-8);
 }
 
 .snepi__grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-5);
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--space-4);
 }
 
 .snepi__item {
@@ -85,20 +74,15 @@ const displayPhotos = computed(() =>
 }
 
 .snepi__photo {
-  aspect-ratio: 3 / 4;
-  overflow: hidden;
   border: 1px solid var(--border-hair);
 }
 
-.snepi__photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.snepi__photo :deep(img) {
   filter: grayscale(0.12);
-  transition: transform 1.1s var(--ease-editorial), filter 1.1s var(--ease-editorial);
+  transition: transform 1.1s var(--ease-editorial), filter 1.1s var(--ease-editorial), opacity 0.5s var(--ease-editorial);
 }
 
-.snepi__item:hover .snepi__photo img {
+.snepi__item:hover .snepi__photo :deep(img) {
   transform: scale(1.04);
   filter: grayscale(0);
 }
@@ -112,7 +96,11 @@ const displayPhotos = computed(() =>
   color: var(--text-muted);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 900px) {
+  .snepi__grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 500px) {
   .snepi__grid { grid-template-columns: repeat(2, 1fr); }
 }
 </style>
