@@ -206,8 +206,22 @@ async function handleRemove(p: Painting) {
 .painting-row__del:hover { color: #b04040; }
 
 @media (max-width: 600px) {
+  .add-form__body { padding: var(--space-5); }
   .add-form__fields { grid-template-columns: 1fr; }
-  .painting-row { grid-template-columns: 60px 1fr; }
-  .painting-row__actions { flex-direction: row; grid-column: 1 / -1; }
+  .upload-zone__preview { max-height: 200px; }
+  .painting-row {
+    grid-template-columns: 64px 1fr;
+    gap: var(--space-4);
+    padding: var(--space-4);
+  }
+  .painting-row__img { width: 64px; height: 80px; }
+  .painting-row__actions {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    grid-column: 1 / -1;
+    margin-top: var(--space-2);
+  }
+  .painting-row__avail { flex: 1; text-align: center; }
 }
 </style>

@@ -15,10 +15,17 @@ export function useSupabase(): SupabaseClient<Database> {
     throw new Error('Supabase URL or key is not configured')
   }
 
+  const isClient = import.meta.client
+
   _client = createClient<Database>(url, key, {
     auth: {
-      persistSession: true,
-      autoRefreshToken: true,
+      // Only persist on the client — the server has no localStorage and would
+      // otherwise fall back to in-memory storage, losing the session on reload.
+      persistSession: isClient,
+      autoRefreshToken: isClient,
+      detectSessionInUrl: isClient,
+      storage: isClient ? window.localStorage : undefined,
+      storageKey: 'hk-admin-auth',
     },
   })
 

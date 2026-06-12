@@ -342,4 +342,13 @@ function dropOnto(target: Photo) {
   transition: color var(--dur-fast) var(--ease-soft);
 }
 .photo-grid__del:hover { color: #b04040; }
+
+@media (max-width: 600px) {
+  .upload-zone { padding: var(--space-7) var(--space-5); }
+  .pending__grid { grid-template-columns: repeat(2, 1fr); }
+  .pending__actions { flex-direction: column; align-items: stretch; }
+  .photo-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-3); }
+  /* larger touch targets for delete on touch screens */
+  .photo-grid__del { font-size: 1.4rem; padding: 4px 8px; }
+}
 </style>

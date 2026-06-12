@@ -156,4 +156,12 @@ async function handleRemove(d: Digital) {
 .photo-grid__cat { font-family: var(--font-body); font-size: var(--text-xs); letter-spacing: var(--tracking-wide); color: var(--text-muted); text-transform: uppercase; }
 .photo-grid__del { background: none; border: none; cursor: pointer; color: var(--text-faint); font-size: 1.1rem; line-height: 1; padding: 2px 4px; transition: color var(--dur-fast) var(--ease-soft); }
 .photo-grid__del:hover { color: #b04040; }
+
+@media (max-width: 600px) {
+  .upload-zone { padding: var(--space-7) var(--space-5); }
+  .pending__grid { grid-template-columns: repeat(2, 1fr); }
+  .pending__actions { flex-direction: column; align-items: stretch; }
+  .photo-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-3); }
+  .photo-grid__del { font-size: 1.4rem; padding: 4px 8px; }
+}
 </style>

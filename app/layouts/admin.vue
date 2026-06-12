@@ -137,22 +137,47 @@ const links = [
     grid-template-columns: 1fr;
   }
   .admin__sidebar {
-    position: static;
+    position: sticky;
+    top: 0;
+    z-index: 10;
     height: auto;
-    flex-direction: row;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
+    column-gap: var(--space-4);
     padding: var(--space-4) var(--space-5);
-    gap: var(--space-4);
+    border-right: none;
+    border-bottom: 1px solid var(--border-hair);
+    background: var(--bg-raised);
   }
-  .admin__brand { margin-bottom: 0; }
+  .admin__brand {
+    grid-row: 1;
+    grid-column: 1;
+    margin-bottom: 0;
+  }
+  .admin__logout {
+    grid-row: 1;
+    grid-column: 3;
+    padding: var(--space-2) var(--space-3);
+  }
   .admin__nav {
+    grid-row: 2;
+    grid-column: 1 / -1;
     flex-direction: row;
-    flex-wrap: wrap;
+    flex: none;
     gap: var(--space-1);
+    margin-top: var(--space-3);
+    overflow-x: auto;
+    /* keep links on one row, scroll instead of wrapping */
+    flex-wrap: nowrap;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .admin__nav::-webkit-scrollbar { display: none; }
+  .admin__link {
+    white-space: nowrap;
     flex: none;
   }
-  .admin__logout { margin-left: auto; }
   .admin__main { padding: var(--space-6) var(--space-5); }
 }
 </style>
