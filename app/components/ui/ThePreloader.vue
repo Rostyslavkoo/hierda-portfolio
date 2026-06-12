@@ -20,7 +20,13 @@ import { usePreloadImages } from '~/composables/usePreloadImages'
 const visible = ref(true)
 const { progress, preload } = usePreloadImages()
 
-function hide() { visible.value = false }
+function hide() {
+  if (!visible.value) return
+  visible.value = false
+  // Signal scroll-reveal (AOS) to init now that the curtain is lifting and the
+  // page is laid out — element offsets are only measurable once we're visible.
+  window.dispatchEvent(new Event('preloader:done'))
+}
 
 onMounted(async () => {
   // Safety net: never trap the user behind the curtain if something stalls.
@@ -59,6 +65,20 @@ onMounted(async () => {
   font-size: 2.4rem;
   color: var(--text-strong);
   letter-spacing: 0.04em;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .preloader__inner {
+    animation: gFadeUp 0.8s var(--ease-editorial) both;
+  }
+  .preloader__mono {
+    animation: monoBreath 2.6s var(--ease-editorial) infinite;
+  }
+}
+
+@keyframes monoBreath {
+  0%, 100% { opacity: 0.55; }
+  50%      { opacity: 1; }
 }
 
 .preloader__bar {

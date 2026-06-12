@@ -23,7 +23,7 @@ export const model: ModelData = {
   quote: 'Drawn to stillness and the spaces between movement.',
   bio: 'Hierda Karlson is a Madrid-based fashion model and artist working across editorial, runway, and campaign. Her approach favours a restrained, sculptural presence — the kind that lets the garment, the light, and the silence speak first.',
   polaroidCaption: 'Madrid, 2025',
-  email: 'studio@hierdakarlson.com',
+  email: 'gerdakarlson.o@gmail.com',
   instagram: 'https://instagram.com/hierdakarlson',
   stats: [
     { key: 'Height',       value: '178 cm' },

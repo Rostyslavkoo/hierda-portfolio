@@ -1,25 +1,27 @@
 <template>
   <section id="about" class="about bleed-section">
-    <div class="bleed-title">ABOUT ME</div>
+    <div class="bleed-title" data-aos="reveal-fade">ABOUT ME</div>
 
     <div class="about__inner">
-      <figure class="about__polaroid">
+      <figure class="about__polaroid" data-aos="reveal-up">
         <AppImage :src="aboutPhoto.src" :alt="aboutPhoto.alt" ratio="3 / 4" />
         <figcaption class="about__polaroid-cap">{{ aboutPhoto.label }}</figcaption>
       </figure>
 
       <div class="about__text">
-        <blockquote class="about__quote">
+        <blockquote class="about__quote" data-aos="reveal-up" data-aos-delay="100">
           "{{ model.quote }}"
         </blockquote>
-        <p class="about__body">{{ model.bio }}</p>
+        <p class="about__body" data-aos="reveal-up" data-aos-delay="180">{{ model.bio }}</p>
 
         <div class="about__stats">
           <AppStat
-            v-for="stat in aboutStats"
+            v-for="(stat, i) in aboutStats"
             :key="stat.key"
             :value="stat.value"
             :label="stat.key"
+            data-aos="reveal-up"
+            :data-aos-delay="240 + i * 70"
           />
         </div>
       </div>

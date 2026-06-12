@@ -1,8 +1,8 @@
 <template>
   <section id="parametry" class="parametry bleed-section">
-    <div class="bleed-title">PARAMETERS</div>
+    <div class="bleed-title" data-aos="reveal-fade">PARAMETERS</div>
 
-    <div class="parametry__card">
+    <div class="parametry__card" data-aos="reveal-up">
       <div class="parametry__card-head">
         <span class="parametry__card-name">Hierda Karlson</span>
         <span class="parametry__card-occ">Model · Madrid</span>
@@ -10,10 +10,12 @@
 
       <dl class="parametry__grid">
         <div
-          v-for="stat in stats"
+          v-for="(stat, i) in stats"
           :key="stat.key"
           class="parametry__cell"
           :class="{ 'parametry__cell--full': stat.span }"
+          data-aos="reveal-up"
+          :data-aos-delay="80 + i * 60"
         >
           <dt class="parametry__key">{{ stat.key }}</dt>
           <dd class="parametry__val">{{ stat.value }}</dd>

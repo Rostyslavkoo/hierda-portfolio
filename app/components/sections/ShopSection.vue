@@ -1,13 +1,15 @@
 <template>
   <section id="shop" class="shop bleed-section">
-    <div class="bleed-title">ORIGINAL WORKS</div>
-    <p class="shop__sub">Paintings available for acquisition</p>
+    <div class="bleed-title" data-aos="reveal-fade">ORIGINAL WORKS</div>
+    <p class="shop__sub" data-aos="reveal-up">Paintings available for acquisition</p>
 
     <div class="shop__grid">
       <article
-        v-for="painting in paintings"
+        v-for="(painting, i) in paintings"
         :key="painting.id"
         class="painting"
+        data-aos="reveal-up"
+        :data-aos-delay="i * 90"
       >
         <AppImage class="painting__frame" :src="painting.src" :alt="painting.alt" ratio="4 / 5" />
         <div class="painting__body">

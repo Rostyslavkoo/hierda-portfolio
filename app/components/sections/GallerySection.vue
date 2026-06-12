@@ -1,6 +1,6 @@
 <template>
   <section id="portfolio" class="gallery bleed-section">
-    <div class="bleed-title">PORTFOLIO</div>
+    <div class="bleed-title" data-aos="reveal-fade">PORTFOLIO</div>
 
     <template v-if="row1.length > 0">
       <div class="gallery__spread">
@@ -11,6 +11,8 @@
           :class="`gallery__item--${photo.cls}`"
           @click="open(i)"
           :aria-label="photo.label"
+          data-aos="reveal-fade"
+          :data-aos-delay="i * 90"
         >
           <img :src="photo.src" :alt="photo.alt" loading="lazy" decoding="async" />
           <span class="gallery__label">{{ photo.label }}</span>
@@ -24,6 +26,8 @@
           class="gallery__item"
           @click="open(row1.length + i)"
           :aria-label="photo.label"
+          data-aos="reveal-fade"
+          :data-aos-delay="i * 90"
         >
           <img :src="photo.src" :alt="photo.alt" loading="lazy" decoding="async" />
           <span class="gallery__label">{{ photo.label }}</span>

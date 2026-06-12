@@ -6,6 +6,7 @@ export default defineNuxtConfig({
   css: [
     '~/assets/styles/reset.css',
     '~/assets/styles/global.css',
+    '~/assets/styles/aos-overrides.css',
   ],
 
   components: [

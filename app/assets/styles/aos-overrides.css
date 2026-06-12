@@ -1,0 +1,49 @@
+/* AOS overrides — bend the library to the Gerda "slow & cinematic" brand rule.
+ *
+ * AOS's built-in easings are spring-/bounce-flavoured. The brand forbids bouncy
+ * motion, so we register a single custom easing alias `ease-editorial` that maps
+ * to --ease-editorial and only use translate + opacity (no scale/rotate). */
+
+[data-aos] {
+  /* Default transition timing for every AOS element. */
+  transition-timing-function: var(--ease-editorial);
+}
+
+/* The custom easing class AOS applies when easing: 'ease-editorial'. */
+[data-aos][data-aos].aos-animate {
+  transition-timing-function: var(--ease-editorial);
+}
+
+body[data-aos-easing='ease-editorial'] [data-aos],
+[data-aos][data-aos-easing='ease-editorial'] {
+  transition-timing-function: var(--ease-editorial);
+}
+
+/* Custom reveal: a restrained FadeUp matching --keyframe gFadeUp.
+ * Use data-aos="reveal-up" for the house style. */
+[data-aos='reveal-up'] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition-property: opacity, transform;
+}
+[data-aos='reveal-up'].aos-animate {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* A softer fade with no vertical travel — for large media / hero tiles. */
+[data-aos='reveal-fade'] {
+  opacity: 0;
+  transition-property: opacity;
+}
+[data-aos='reveal-fade'].aos-animate {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-aos] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

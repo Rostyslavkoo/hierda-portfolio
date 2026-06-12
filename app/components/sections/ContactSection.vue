@@ -1,7 +1,7 @@
 <template>
   <section id="contact" class="contact">
-    <h2 class="contact__bleed-title">CONTACT</h2>
-    <p class="contact__sub">Madrid · Available worldwide</p>
+    <h2 class="contact__bleed-title" data-aos="reveal-fade">CONTACT</h2>
+    <p class="contact__sub" data-aos="reveal-up">Madrid · Available worldwide</p>
 
     <svg
       class="contact__flower"
@@ -33,7 +33,7 @@
       <path d="M362 64 C378 56 386 66 374 74" />
     </svg>
 
-    <nav class="contact__links" aria-label="Contact links">
+    <nav class="contact__links" aria-label="Contact links" data-aos="reveal-up" data-aos-delay="80">
       <a :href="model.instagram" target="_blank" rel="noopener noreferrer" class="contact__link">
         Instagram <span class="arr" aria-hidden="true">↗</span>
       </a>
@@ -91,6 +91,12 @@ const { fields, submitted, submit } = useContactForm()
 <style scoped>
 /* Layout, links and form styling come from the global portfolio.css reference.
  * Only the submit row + acknowledgement (inline-styled in the reference) live here. */
+
+/* Push the form (and its "Send a message" caption) well below the links block
+ * so the caption never collides with the Name/Email field labels. */
+.contact__form-label { margin-top: 64px; }
+.contact__form { margin-top: 8px; }
+
 .contact__form-actions {
   display: flex;
   align-items: center;
