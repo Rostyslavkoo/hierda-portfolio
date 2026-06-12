@@ -1,0 +1,29 @@
+<!-- @dsCard group="Spacing" viewport="700x180" name="Spacing scale" subtitle="4px base — generous editorial rhythm" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; background: var(--bg-base); font-family: var(--font-body); padding: 32px; }
+  .row { display: flex; align-items: flex-end; gap: 18px; }
+  .col { text-align: center; }
+  .bar { background: var(--accent); border-radius: var(--radius-xs); width: 100%; }
+  .b1 { width: 4px; height: 4px; } .b2 { width: 8px; height: 8px; } .b3 { width: 16px; height: 16px; }
+  .b4 { width: 24px; height: 24px; } .b5 { width: 32px; height: 32px; } .b6 { width: 48px; height: 48px; }
+  .b7 { width: 64px; height: 64px; }
+  .lab { color: var(--text-muted); font-size: 11px; margin-top: 10px; font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+  <div class="row">
+    <div class="col"><div class="bar b1"></div><div class="lab">1·4</div></div>
+    <div class="col"><div class="bar b2"></div><div class="lab">2·8</div></div>
+    <div class="col"><div class="bar b3"></div><div class="lab">3·16</div></div>
+    <div class="col"><div class="bar b4"></div><div class="lab">5·24</div></div>
+    <div class="col"><div class="bar b5"></div><div class="lab">6·32</div></div>
+    <div class="col"><div class="bar b6"></div><div class="lab">7·48</div></div>
+    <div class="col"><div class="bar b7"></div><div class="lab">8·64</div></div>
+  </div>
+</body>
+</html>
