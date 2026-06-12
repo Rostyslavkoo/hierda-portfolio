@@ -1,11 +1,5 @@
 <template>
-  <hr class="sep" />
+  <div class="section-sep" />
 </template>
 
-<style scoped>
-.sep {
-  border: none;
-  border-top: 1px solid var(--border-hair);
-  margin: 0;
-}
-</style>
+<!-- .section-sep is styled by the global portfolio.css reference sheet. -->

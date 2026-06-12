@@ -76,32 +76,15 @@ useHead(computed(() => ({
 </script>
 
 <style scoped>
-.cover {
-  position: relative;
-  width: 100%;
-  height: 100svh;
-  min-height: 600px;
-  overflow: hidden;
-}
-
-.cover__photos {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  height: 100%;
-  gap: 2px;
-}
-
-.cover__photo-wrap {
-  position: relative;
-  overflow: hidden;
-  background: var(--bg-raised);
-}
-
+/* Layout & visuals come from the global portfolio.css (reference design).
+ * Here we only layer the load-in skeleton + fade so cached/slow images
+ * animate cleanly without overriding the reference look. */
+.cover__photo-wrap { position: relative; }
 .cover__photo-wrap::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.22), transparent);
   background-size: 200% 100%;
   z-index: 1;
   pointer-events: none;
@@ -118,86 +101,11 @@ useHead(computed(() => ({
 }
 
 .cover__photo-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: grayscale(0.12);
-  transform: scale(1);
   opacity: 0;
   transition: transform 1.3s var(--ease-editorial), opacity 0.6s var(--ease-editorial);
 }
 
 .cover__photo-wrap--loaded img {
   opacity: 1;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .cover__photo-wrap img {
-    animation: kenBurns 22s var(--ease-editorial) infinite alternate;
-  }
-
-  .cover__photo-wrap:nth-child(2) img { animation-delay: -7s; }
-  .cover__photo-wrap:nth-child(3) img { animation-delay: -14s; }
-}
-
-.cover__photo-wrap:hover img {
-  transform: scale(1.04);
-  filter: grayscale(0);
-}
-
-.cover__identity {
-  position: absolute;
-  bottom: var(--space-9);
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-4);
-  text-align: center;
-  pointer-events: none;
-}
-
-.cover__pills {
-  display: flex;
-  gap: var(--space-3);
-  pointer-events: all;
-}
-
-.cover__pill {
-  font-family: var(--font-body);
-  font-size: var(--text-xs);
-  font-weight: var(--weight-medium);
-  letter-spacing: var(--tracking-wider);
-  text-transform: uppercase;
-  color: var(--text-strong);
-  border: 1px solid var(--accent);
-  border-radius: var(--radius-pill);
-  padding: 8px 20px;
-  transition: background var(--dur-fast) var(--ease-soft), color var(--dur-fast) var(--ease-soft);
-  mix-blend-mode: difference;
-}
-.cover__pill:hover {
-  background: var(--accent);
-  color: var(--on-accent);
-}
-
-.cover__name-line {
-  font-family: var(--font-body);
-  font-size: var(--text-xs);
-  font-weight: var(--weight-medium);
-  letter-spacing: var(--tracking-widest);
-  text-transform: uppercase;
-  color: var(--text-muted);
-  mix-blend-mode: difference;
-}
-
-@media (max-width: 600px) {
-  .cover__photos {
-    grid-template-columns: 1fr;
-  }
-  .cover__photos .cover__photo-wrap:not(:first-child) {
-    display: none;
-  }
 }
 </style>

@@ -1,71 +1,83 @@
 <template>
   <section id="contact" class="contact">
-    <div class="contact__bleed-title">CONTACT</div>
+    <h2 class="contact__bleed-title">CONTACT</h2>
+    <p class="contact__sub">Madrid · Available worldwide</p>
 
-    <div class="contact__center">
-      <p class="contact__sub">Madrid · Available Worldwide</p>
+    <svg
+      class="contact__flower"
+      width="420" height="120"
+      viewBox="0 0 420 120"
+      fill="none"
+      stroke="#1a1a1a"
+      stroke-width="1.1"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      style="opacity: 0.28"
+    >
+      <path d="M60 118 C58 96 52 80 55 58 C57 42 66 26 62 8" />
+      <path d="M62 8 C46 -4 30 6 46 22 C52 28 62 8 62 8" />
+      <path d="M62 8 C78 -4 92 6 76 22 C70 28 62 8 62 8" />
+      <path d="M62 8 C42 10 36 26 52 28 C58 30 62 8 62 8" />
+      <path d="M62 8 C82 12 86 28 70 28 C64 30 62 8 62 8" />
+      <path d="M62 8 C62 -10 70 -2 62 8" />
+      <path d="M58 64 C42 56 34 66 46 74" />
+      <path d="M56 82 C66 70 78 72 70 82" />
+      <path d="M62 90 C120 70 190 90 210 60 C230 32 280 50 340 40 C360 36 380 28 360 10" />
+      <path d="M360 118 C362 96 368 80 365 58 C363 42 354 26 358 8" />
+      <path d="M358 8 C342 -4 326 6 342 22 C348 28 358 8 358 8" />
+      <path d="M358 8 C374 -4 388 6 372 22 C366 28 358 8 358 8" />
+      <path d="M358 8 C338 10 332 26 348 28 C354 30 358 8 358 8" />
+      <path d="M358 8 C378 12 382 28 366 28 C360 30 358 8 358 8" />
+      <path d="M358 8 C358 -10 366 -2 358 8" />
+      <path d="M362 64 C378 56 386 66 374 74" />
+    </svg>
 
-      <div class="contact__ribbon" aria-hidden="true">
-        <svg width="260" height="90" viewBox="0 0 260 90" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- left bow -->
-          <path d="M65 45 C55 20 20 18 18 38 C16 55 50 58 65 45Z" stroke="currentColor" stroke-width="0.9" fill="none"/>
-          <path d="M65 45 C55 70 20 72 18 52 C16 35 50 32 65 45Z" stroke="currentColor" stroke-width="0.9" fill="none"/>
-          <!-- right bow -->
-          <path d="M195 45 C205 20 240 18 242 38 C244 55 210 58 195 45Z" stroke="currentColor" stroke-width="0.9" fill="none"/>
-          <path d="M195 45 C205 70 240 72 242 52 C244 35 210 32 195 45Z" stroke="currentColor" stroke-width="0.9" fill="none"/>
-          <!-- ribbon line -->
-          <path d="M65 45 Q130 32 195 45" stroke="currentColor" stroke-width="0.8" fill="none"/>
-          <path d="M65 45 Q130 58 195 45" stroke="currentColor" stroke-width="0.8" fill="none"/>
-          <!-- center knot -->
-          <circle cx="130" cy="45" r="4" stroke="currentColor" stroke-width="0.8" fill="none"/>
-        </svg>
-      </div>
+    <nav class="contact__links" aria-label="Contact links">
+      <a :href="model.instagram" target="_blank" rel="noopener noreferrer" class="contact__link">
+        Instagram <span class="arr" aria-hidden="true">↗</span>
+      </a>
+      <a :href="`mailto:${model.email}`" class="contact__link">
+        Email <span class="arr" aria-hidden="true">↗</span>
+      </a>
+      <a href="#" class="contact__link">
+        Agency <span class="arr" aria-hidden="true">↗</span>
+      </a>
+    </nav>
 
-      <nav class="contact__links" aria-label="Social links">
-        <a :href="model.instagram" target="_blank" rel="noopener noreferrer" class="contact__link">
-          Instagram <span class="arr" aria-hidden="true">↗</span>
-        </a>
-        <a :href="`mailto:${model.email}`" class="contact__link">
-          Email <span class="arr" aria-hidden="true">↗</span>
-        </a>
-        <a href="#" class="contact__link">
-          Agency <span class="arr" aria-hidden="true">↗</span>
-        </a>
-      </nav>
-
-      <div v-if="submitted" class="contact__thanks">
-        <p>Thank you — I'll be in touch.</p>
-      </div>
-
-      <form v-else class="contact__form" @submit="submit" novalidate>
-        <p class="contact__form-label">Send a message</p>
-        <div class="contact__form-row">
-          <AppInput
-            v-model="fields.name"
-            label="Name"
-            placeholder="Your name"
-            :required="true"
-          />
-          <AppInput
-            v-model="fields.email"
-            label="Email"
-            type="email"
-            placeholder="your@email.com"
-            :required="true"
-          />
-        </div>
-        <AppTextarea
-          v-model="fields.message"
-          label="Message"
-          placeholder="Tell me about the project…"
-          :rows="5"
+    <p class="contact__form-label">Send a message</p>
+    <form class="contact__form" @submit="submit" novalidate>
+      <div class="contact__form-row">
+        <AppInput
+          v-model="fields.name"
+          label="Name"
+          placeholder="Your name"
           :required="true"
         />
+        <AppInput
+          v-model="fields.email"
+          label="Email"
+          type="email"
+          placeholder="you@studio.com"
+          :required="true"
+        />
+      </div>
+      <AppTextarea
+        v-model="fields.message"
+        label="Message"
+        placeholder="Tell me about the project"
+        :rows="3"
+        :required="true"
+      />
+      <div class="contact__form-actions">
         <AppButton variant="solid" size="md" as="button" type="submit">
           Send
         </AppButton>
-      </form>
-    </div>
+        <span v-if="submitted" class="contact__thanks">
+          Thank you — I'll be in touch.
+        </span>
+      </div>
+    </form>
   </section>
 </template>
 
@@ -77,107 +89,18 @@ const { fields, submitted, submit } = useContactForm()
 </script>
 
 <style scoped>
-.contact {
-  padding: var(--section-pad-y) 0;
-  overflow: hidden;
-}
-
-.contact__bleed-title {
-  font-family: var(--font-bleed);
-  font-size: clamp(4rem, 18vw, 16rem);
-  line-height: 0.9;
-  letter-spacing: 0.02em;
-  color: var(--text-strong);
-  white-space: nowrap;
-  user-select: none;
-  pointer-events: none;
-  text-align: center;
-  margin-bottom: var(--space-6);
-}
-
-.contact__center {
+/* Layout, links and form styling come from the global portfolio.css reference.
+ * Only the submit row + acknowledgement (inline-styled in the reference) live here. */
+.contact__form-actions {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: var(--space-7);
-  padding: 0 var(--gutter);
-}
-
-.contact__sub {
-  font-family: var(--font-body);
-  font-size: var(--text-xs);
-  letter-spacing: var(--tracking-widest);
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-
-.contact__ribbon {
-  color: var(--text-muted);
-  opacity: 0.45;
-}
-
-.contact__links {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-3);
-}
-
-.contact__link {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  font-family: var(--font-body);
-  font-size: var(--text-base);
-  font-weight: var(--weight-semibold);
-  letter-spacing: var(--tracking-widest);
-  text-transform: uppercase;
-  color: var(--text-strong);
-  transition: color var(--dur-fast) var(--ease-soft);
-}
-
-.contact__link:hover {
-  color: var(--text-accent);
-}
-
-.arr {
-  font-style: normal;
-}
-
-.contact__form {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-7);
-  width: 100%;
-  max-width: 760px;
-}
-
-.contact__form-label {
-  font-family: var(--font-body);
-  font-size: var(--text-xs);
-  font-weight: var(--weight-medium);
-  letter-spacing: var(--tracking-widest);
-  text-transform: uppercase;
-  color: var(--text-muted);
-  align-self: center;
-}
-
-.contact__form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-7);
+  gap: 24px;
 }
 
 .contact__thanks {
   font-family: var(--font-display);
-  font-size: var(--display-md);
   font-style: italic;
-  color: var(--text-strong);
-  padding: var(--space-8) 0;
-  text-align: center;
-}
-
-@media (max-width: 600px) {
-  .contact__form-row { grid-template-columns: 1fr; }
+  font-size: 1.2rem;
+  color: var(--text-muted);
 }
 </style>

@@ -1,12 +1,10 @@
 <template>
-  <section id="about" class="about">
-    <div class="bleed-section">
-      <h2 class="bleed-title" aria-hidden="true">ABOUT ME</h2>
-    </div>
+  <section id="about" class="about bleed-section">
+    <div class="bleed-title">ABOUT ME</div>
 
     <div class="about__inner">
       <figure class="about__polaroid">
-        <AppImage class="about__img-wrap" :src="aboutPhoto.src" :alt="aboutPhoto.alt" ratio="3 / 4" />
+        <AppImage :src="aboutPhoto.src" :alt="aboutPhoto.alt" ratio="3 / 4" />
         <figcaption class="about__polaroid-cap">{{ aboutPhoto.label }}</figcaption>
       </figure>
 
@@ -70,97 +68,8 @@ const aboutStats = computed(() => {
 </script>
 
 <style scoped>
-.about {
-  padding: var(--section-pad-y) 0;
-}
-
-.bleed-section {
-  overflow: hidden;
-  margin-bottom: var(--space-9);
-}
-
-.bleed-title {
-  font-family: var(--font-bleed);
-  font-size: clamp(4rem, 18vw, 16rem);
-  line-height: 0.9;
-  letter-spacing: 0.02em;
-  color: var(--text-strong);
-  white-space: nowrap;
-  user-select: none;
-  pointer-events: none;
-}
-
-.about__inner {
-  padding: 0 var(--gutter);
-  display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  gap: var(--space-10);
-  align-items: start;
-}
-
-.about__polaroid {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-  position: relative;
-}
-
-.about__img-wrap {
-  width: 100%;
-}
-
-.about__polaroid :deep(img) {
-  filter: grayscale(0.1);
-  transition: filter var(--dur-base) var(--ease-editorial), opacity 0.5s var(--ease-editorial);
-}
-
-.about__polaroid:hover :deep(img) {
-  filter: grayscale(0);
-}
-
-.about__polaroid-cap {
-  font-family: var(--font-body);
-  font-size: var(--text-xs);
-  letter-spacing: var(--tracking-wider);
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-
-.about__text {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-7);
-  padding-top: var(--space-6);
-}
-
-.about__quote {
-  font-family: var(--font-display);
-  font-size: var(--display-lg);
-  font-weight: var(--weight-light);
-  font-style: italic;
-  color: var(--text-strong);
-  line-height: var(--leading-snug);
-  letter-spacing: var(--tracking-tight);
-  max-width: var(--measure);
-}
-
-.about__body {
-  font-family: var(--font-body);
-  font-size: var(--text-lg);
-  line-height: var(--leading-relaxed);
-  color: var(--text-body);
-  max-width: var(--measure);
-}
-
-.about__stats {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-7);
-  padding-top: var(--space-6);
-  border-top: 1px solid var(--border-hair);
-}
-
-@media (max-width: 768px) {
-  .about__inner { grid-template-columns: 1fr; }
-}
+/* Visual styling comes from the global portfolio.css reference sheet.
+ * The polaroid caption is positioned within the frame's bottom padding. */
+.about__polaroid { margin: 0; }
+.about__polaroid blockquote { margin: 0; }
 </style>
