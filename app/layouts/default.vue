@@ -34,20 +34,21 @@ function onSettled(e: TransitionEvent) {
 
 <style scoped>
 .site-reveal {
-  /* Pre-reveal resting state: pushed in a touch. transform-origin top keeps the
-   * cover anchored under the nav while it scales.
+  /* Pre-reveal resting state: nudged down a touch, then eased to 0 on reveal.
    *
-   * NOTE: opacity stays 1 here. The content must never depend on the preloader
-   * to become visible — if the preloader stalls, the page is still readable
-   * under (or instead of) the curtain. The reveal is now purely a scale easing;
-   * the opaque preloader overlay hides the pre-scaled state until it lifts. */
-  transform: scale(1.1);
-  transform-origin: 50% 0;
+   * We use translateY, NOT scale: scale(1.1) makes the content wider than the
+   * viewport, which on mobile makes the browser load the page zoomed-out and
+   * pannable sideways. translateY moves vertically only — no overflow, no zoom.
+   *
+   * opacity stays 1 so content never depends on the preloader to be visible —
+   * if the preloader stalls, the page is still readable. The opaque preloader
+   * overlay hides this pre-reveal offset until it lifts. */
+  transform: translateY(24px);
   will-change: transform;
 }
 
 .site-reveal--in {
-  transform: scale(1);
+  transform: translateY(0);
 }
 
 /* Animation done — drop the transform so descendant position:fixed (lightbox)
@@ -63,7 +64,7 @@ function onSettled(e: TransitionEvent) {
   }
 }
 
-/* Reduced motion: no scale, content is simply present. */
+/* Reduced motion: no movement, content is simply present. */
 @media (prefers-reduced-motion: reduce) {
   .site-reveal {
     transform: none;

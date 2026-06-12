@@ -1,4 +1,4 @@
-import { ref, onMounted, onUnmounted, isRef } from 'vue'
+import { ref, onScopeDispose, isRef } from 'vue'
 import type { Ref, ComputedRef } from 'vue'
 import type { GalleryPhoto } from '~/data/gallery'
 
@@ -40,11 +40,17 @@ export function useLightbox(source: PhotoSource) {
     if (e.key === 'Escape')     close()
   }
 
-  onMounted(() => window.addEventListener('keydown', onKeydown))
-  onUnmounted(() => {
-    window.removeEventListener('keydown', onKeydown)
-    if (import.meta.client) document.body.style.overflow = ''
-  })
+  // Wire the listener directly rather than via onMounted: GallerySection calls
+  // this after an `await` in its setup, by which point the active component
+  // instance is gone and onMounted would warn + no-op. onScopeDispose is bound
+  // to the setup scope (not the mount lifecycle), so cleanup still runs.
+  if (import.meta.client) {
+    window.addEventListener('keydown', onKeydown)
+    onScopeDispose(() => {
+      window.removeEventListener('keydown', onKeydown)
+      document.body.style.overflow = ''
+    })
+  }
 
   return { isOpen, currentIndex, open, close, prev, next }
 }

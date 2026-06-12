@@ -8,6 +8,11 @@ html {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Clip any horizontal overflow so the page can't be panned/zoomed sideways
+   * on mobile. The reveal applies transform: scale(1.1) to the content, which
+   * is 10% wider than the viewport mid-animation; without this the page loads
+   * looking zoomed-in and swipes left/right. */
+  overflow-x: hidden;
 }
 
 body {
@@ -16,6 +21,7 @@ body {
   font-family: var(--font-body);
   font-size: var(--text-base);
   line-height: var(--leading-normal);
+  overflow-x: hidden;
 }
 
 ::selection {
