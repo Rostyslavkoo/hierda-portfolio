@@ -16,13 +16,18 @@
 import { ref, onMounted } from 'vue'
 import { useSitePhotos } from '~/composables/useSitePhotos'
 import { usePreloadImages } from '~/composables/usePreloadImages'
+import { usePreloaderDone } from '~/composables/usePreloaderDone'
 
 const visible = ref(true)
 const { progress, preload } = usePreloadImages()
+const { done } = usePreloaderDone()
 
 function hide() {
   if (!visible.value) return
   visible.value = false
+  // Flip shared state so the layout's scale-in reveal triggers even if it
+  // mounted after us — shared state, unlike a one-shot event, can't be missed.
+  done.value = true
   // Signal scroll-reveal (AOS) to init now that the curtain is lifting and the
   // page is laid out — element offsets are only measurable once we're visible.
   window.dispatchEvent(new Event('preloader:done'))
@@ -32,8 +37,17 @@ onMounted(async () => {
   // Safety net: never trap the user behind the curtain if something stalls.
   const safety = setTimeout(hide, 8000)
 
-  const { data: urls } = await useSitePhotos()
-  await preload(urls.value ?? [])
+  try {
+    const { data: urls } = await useSitePhotos()
+    await preload(urls.value ?? [])
+  } catch (err) {
+    // Missing Supabase config or a failed fetch must never wedge the curtain —
+    // lift it and let the page render with its static fallback data.
+    console.error('[preloader] failed to load site photos:', err)
+    clearTimeout(safety)
+    hide()
+    return
+  }
 
   clearTimeout(safety)
   // Brief hold at 100% so the bar visibly completes before the curtain lifts.

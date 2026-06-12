@@ -35,7 +35,12 @@ export default defineNuxtPlugin(() => {
     init()
   }
 
-  window.addEventListener('preloader:done', start, { once: true })
+  // Gate on shared preloader state rather than a one-shot event: in production
+  // the preloader can emit `preloader:done` before this plugin's listener is
+  // wired up, leaving AOS uninitialised and every [data-aos] section stuck at
+  // opacity:0. Watching state (with immediate) catches an already-done flag.
+  const { done } = usePreloaderDone()
+  watch(done, (v) => { if (v) start() }, { immediate: true })
   // Fallback: if the preloader is absent or stalls, start anyway.
   setTimeout(start, 8500)
 })
