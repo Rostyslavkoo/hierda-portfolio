@@ -1,0 +1,43 @@
+/* Gerda — Spacing, radii, motion
+ * Generous editorial whitespace. Corners are nearly square — luxury is flat.
+ */
+:root {
+  /* ---- Spacing scale (4px base) ---- */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  24px;
+  --space-6:  32px;
+  --space-7:  48px;
+  --space-8:  64px;
+  --space-9:  96px;
+  --space-10: 128px;
+  --space-11: 192px;
+
+  /* ---- Section rhythm ---- */
+  --section-pad-y: clamp(5rem, 12vw, 11rem);
+  --gutter:        clamp(1.5rem, 5vw, 5rem);   /* @kind spacing */
+  --measure:       62ch;          /* max prose width */
+
+  /* ---- Radii (minimal — almost square) ---- */
+  --radius-none: 0;
+  --radius-xs:   2px;
+  --radius-sm:   4px;
+  --radius-pill: 999px;
+
+  /* ---- Borders ---- */
+  --border-w: 1px;
+
+  /* ---- Shadow (used sparingly; lightbox & raised media only) ---- */
+  --shadow-soft: 0 18px 50px -24px rgba(0, 0, 0, 0.8);
+  --shadow-lift: 0 30px 80px -30px rgba(0, 0, 0, 0.9);
+
+  /* ---- Motion: slow, cinematic, never bouncy ---- */
+  --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);   /* @kind other */
+  --ease-soft:      cubic-bezier(0.4, 0, 0.2, 1);   /* @kind other */
+  --dur-fast:   0.35s;   /* @kind other */
+  --dur-base:   0.7s;   /* @kind other */
+  --dur-slow:   1.4s;   /* @kind other */
+  --dur-cinema: 2.4s;   /* @kind other */
+}
