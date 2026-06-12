@@ -34,17 +34,20 @@ function onSettled(e: TransitionEvent) {
 
 <style scoped>
 .site-reveal {
-  /* Pre-reveal resting state: pushed in a touch and dimmed. transform-origin
-   * top keeps the cover anchored under the nav while it scales. */
+  /* Pre-reveal resting state: pushed in a touch. transform-origin top keeps the
+   * cover anchored under the nav while it scales.
+   *
+   * NOTE: opacity stays 1 here. The content must never depend on the preloader
+   * to become visible — if the preloader stalls, the page is still readable
+   * under (or instead of) the curtain. The reveal is now purely a scale easing;
+   * the opaque preloader overlay hides the pre-scaled state until it lifts. */
   transform: scale(1.1);
-  opacity: 0;
   transform-origin: 50% 0;
-  will-change: transform, opacity;
+  will-change: transform;
 }
 
 .site-reveal--in {
   transform: scale(1);
-  opacity: 1;
 }
 
 /* Animation done — drop the transform so descendant position:fixed (lightbox)
@@ -56,17 +59,14 @@ function onSettled(e: TransitionEvent) {
 
 @media (prefers-reduced-motion: no-preference) {
   .site-reveal {
-    transition:
-      transform 1.2s var(--ease-editorial),
-      opacity 0.9s var(--ease-editorial);
+    transition: transform 1.2s var(--ease-editorial);
   }
 }
 
-/* Reduced motion: no scale/fade, content is simply present. */
+/* Reduced motion: no scale, content is simply present. */
 @media (prefers-reduced-motion: reduce) {
   .site-reveal {
     transform: none;
-    opacity: 1;
   }
 }
 </style>

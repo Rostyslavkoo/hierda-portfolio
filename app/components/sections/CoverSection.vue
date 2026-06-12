@@ -85,7 +85,15 @@ function goToSlide(i: number) {
 }
 
 const loadedSet = ref(new Set<string>())
-function onImgLoad(src: string) { loadedSet.value = new Set([...loadedSet.value, src]) }
+function onImgLoad(src: string) {
+  // Guard against re-adding: registerImg runs on every render via the function
+  // ref, and for cached (already-complete) images it would otherwise assign a
+  // fresh Set each time — a new object mutates the reactive dep, forcing another
+  // render, which calls registerImg again → infinite recursive updates. Bail if
+  // already tracked so the reactive value only ever changes on real new loads.
+  if (loadedSet.value.has(src)) return
+  loadedSet.value = new Set([...loadedSet.value, src])
+}
 
 // Cached images can finish loading before Vue attaches @load on hydration,
 // so the event never fires. Check img.complete on mount and mark them loaded.
