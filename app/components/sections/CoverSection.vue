@@ -1,6 +1,6 @@
 <template>
   <section id="cover" class="cover">
-    <div class="cover__photos">
+    <div ref="track" class="cover__photos" @scroll.passive="onScroll">
       <div
         v-for="(photo, i) in coverPhotos"
         :key="photo.src"
@@ -19,6 +19,18 @@
           @load="onImgLoad(photo.src)"
         />
       </div>
+    </div>
+
+    <div v-if="coverPhotos.length > 1" class="cover__dots" aria-hidden="true">
+      <button
+        v-for="(photo, i) in coverPhotos"
+        :key="photo.src"
+        class="cover__dot"
+        :class="{ 'cover__dot--active': i === activeSlide }"
+        type="button"
+        :aria-label="`Go to photo ${i + 1}`"
+        @click="goToSlide(i)"
+      />
     </div>
 
     <div class="cover__identity">
@@ -53,6 +65,24 @@ const coverPhotos = computed(() =>
     objectPosition: ['50% 20%', '50% 10%', '50% 25%'][i] ?? '50% 15%',
   }))
 )
+
+// Mobile swipe carousel — track the active slide for the dot indicators.
+// On desktop the photos sit in a static 3-column grid, so this stays at 0
+// and the dots are hidden via CSS.
+const track = ref<HTMLElement | null>(null)
+const activeSlide = ref(0)
+
+function onScroll() {
+  const el = track.value
+  if (!el) return
+  activeSlide.value = Math.round(el.scrollLeft / el.clientWidth)
+}
+
+function goToSlide(i: number) {
+  const el = track.value
+  if (!el) return
+  el.scrollTo({ left: i * el.clientWidth, behavior: 'smooth' })
+}
 
 const loadedSet = ref(new Set<string>())
 function onImgLoad(src: string) { loadedSet.value = new Set([...loadedSet.value, src]) }
@@ -107,5 +137,32 @@ useHead(computed(() => ({
 
 .cover__photo-wrap--loaded img {
   opacity: 1;
+}
+
+/* Swipe dots — only meaningful on the mobile carousel; hidden ≥640px. */
+.cover__dots {
+  display: none;
+}
+@media (max-width: 639px) {
+  .cover__dots {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 18px;
+  }
+  .cover__dot {
+    width: 7px;
+    height: 7px;
+    padding: 0;
+    border: none;
+    border-radius: 999px;
+    background: var(--text-faint, #c7c2bc);
+    cursor: pointer;
+    transition: background 0.4s var(--ease-editorial), transform 0.4s var(--ease-editorial);
+  }
+  .cover__dot--active {
+    background: var(--text-strong);
+    transform: scale(1.25);
+  }
 }
 </style>

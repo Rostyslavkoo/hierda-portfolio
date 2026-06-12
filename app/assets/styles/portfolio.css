@@ -348,18 +348,101 @@ a { color: inherit; }
   .shop__grid { gap:14px; }
   .contact__form-row { grid-template-columns:1fr; }
 }
-@media (max-width: 640px) {
-  .cover__photos { gap:4px; }
-  .cover__name-line { letter-spacing:.18em; font-size:9px; }
-  .parametry__grid { grid-template-columns:1fr; }
-  .parametry__cell { border-right:none !important; }
-  .snepi__grid { grid-template-columns:repeat(3,1fr); gap:6px; }
-  .shop__grid { grid-template-columns:1fr 1fr; }
-  .gallery__spread { grid-template-columns:1fr; height:auto; }
-  .gallery__item--b,.gallery__item--c { display:none; }
-  .gallery__row2 { grid-template-columns:1fr 1fr; }
-  .gallery__row2 .gallery__item:last-child { display:none; }
+/* ---- Touch devices: no hover, so reveal labels/captions permanently ---- */
+@media (hover: none) {
+  .gallery__label { opacity: 1; }
+  .gallery__item:hover img,
+  .painting:hover .painting__frame img,
+  .snepi__item:hover .snepi__photo img,
+  .cover__photo-wrap:hover img { transform: none; }
 }
+
+/* ============ MOBILE ≤ 639px ============ */
+@media (max-width: 639px) {
+  /* --- Cover: single big photo + horizontal swipe carousel --- */
+  .cover {
+    padding: clamp(76px, 14vh, 110px) 0 clamp(40px, 7vh, 72px);
+  }
+  .cover__photos {
+    display: flex;
+    grid-template-columns: none;
+    gap: 0;
+    max-width: 100%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .cover__photos::-webkit-scrollbar { display: none; }
+  .cover__photo-wrap {
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+    padding: 0 var(--gutter);
+  }
+  .cover__photo-wrap img {
+    aspect-ratio: 4 / 5;
+  }
+  .cover__identity { margin-top: 24px; padding: 0 var(--gutter); }
+  .cover__name-line { letter-spacing: .18em; font-size: 9px; text-align: center; }
+  .cover__pill { height: 44px; padding: 0 22px; }
+
+  /* --- Comp card: single column, comfortable rows --- */
+  .parametry__grid { grid-template-columns: 1fr; }
+  .parametry__cell { border-right: none !important; padding: 16px 22px; }
+  .parametry__card { margin-left: var(--gutter); margin-right: var(--gutter); }
+
+  /* --- Digitals: 2 columns reads better than 3 cramped --- */
+  .snepi__grid { grid-template-columns: repeat(2, 1fr); gap: 10px; padding-top: 28px; }
+
+  /* --- Shop: 1 column, generous cards --- */
+  .shop__grid { grid-template-columns: 1fr; gap: 32px; }
+  .painting__frame img { aspect-ratio: 3 / 4; }
+
+  /* --- Gallery: clean 2-column grid, show every photo --- */
+  .gallery__spread,
+  .gallery__row2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: none;
+    height: auto;
+    gap: 8px;
+    padding: 8px var(--gutter) 0;
+  }
+  .gallery__item,
+  .gallery__item--hero,
+  .gallery__item--a,
+  .gallery__item--b,
+  .gallery__item--c {
+    display: block;
+    grid-column: auto;
+    grid-row: auto;
+    aspect-ratio: 3 / 4;
+  }
+  .gallery__row2 .gallery__item { aspect-ratio: 3 / 4; }
+
+  /* --- Contact: stack form, bigger tap targets --- */
+  .contact__form-row { grid-template-columns: 1fr; }
+  .contact__links { gap: 6px; }
+
+  /* --- Footer: stack into a centered column --- */
+  .footer {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 8px;
+    text-align: center;
+    padding: 24px var(--gutter);
+  }
+  .footer__r { justify-self: center; }
+
+  /* --- Bleed titles must not overflow the viewport --- */
+  .bleed-title { font-size: clamp(56px, 22vw, 120px); white-space: normal; }
+
+  /* --- Lightbox: tighter padding, edge-anchored controls --- */
+  .lightbox { padding: 8vh 4vw; }
+  .lightbox__close { top: 16px; right: 16px; }
+  .lightbox__nav { padding: 12px 8px; }
+}
+
 @media (prefers-reduced-motion:reduce) {
   *,*::before,*::after { animation:none !important; transition-duration:.01ms !important; }
 }
